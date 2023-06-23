@@ -1,0 +1,37 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "typescript-boilerplate  ",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "build": "npm run lint && rimraf dist/ && tsc",
+    "start": "npm run build && node dist/index.js",
+    "test": "jest"
+  },
+  "author": "Augusto Eduardo Torres",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.2",
+    "@types/node": "^18.11.18",
+    "@typescript-eslint/eslint-plugin": "^5.48.1",
+    "@typescript-eslint/parser": "^5.48.1",
+    "eslint": "^8.31.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.0",
+    "jest": "^29.5.0",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.8.2",
+    "rimraf": "^4.0.4",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
+    "tsx": "^3.12.7",
+    "typescript": "*"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "pino": "^8.5.0",
+    "pino-pretty": "^9.1.0"
+  }
+}
