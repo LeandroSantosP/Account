@@ -1,4 +1,4 @@
-import { Account } from "../../Account";
+import { Account } from "../../domain/Account";
 import { IAccountRepository } from "../RepositoriesContracts/IAccountRepository";
 
 export class CreateAccountUseCase {
@@ -8,15 +8,15 @@ export class CreateAccountUseCase {
     const account_exists = await this.accountRepository.getAccountByClientId(
       input.client_id
     );
+
     if (account_exists) throw new Error("Account already exists");
 
     const sequence = await this.accountRepository.getSequence();
 
-    const newAccount = new Account(
+    const newAccount = Account.create(
       input.client_id,
       input.owner_name,
-      sequence,
-      new Date()
+      sequence
     );
 
     await this.accountRepository.save(newAccount);

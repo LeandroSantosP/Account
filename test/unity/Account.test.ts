@@ -1,4 +1,4 @@
-import { Account } from "../../src/Account";
+import { Account } from "../../src/domain/Account";
 interface IAccountTest {
   id: string;
   name: string;
@@ -10,10 +10,9 @@ const AlexAccountTest = ({
   id,
   name,
   created_at = new Date("2023-06-21"),
-  current_date = new Date(),
   sequence = 1,
 }: IAccountTest) => {
-  return new Account(id, name, sequence, created_at, current_date);
+  return Account.create(id, name, sequence, created_at);
 };
 
 test("Deve criar um conta", () => {
@@ -28,7 +27,7 @@ test("Deve criar um conta", () => {
 test("Deve ser criar uma conta con saldo 0", () => {
   const account = AlexAccountTest({ id: "123", name: "Alex" });
   const balance = account.getBalance();
-  expect(balance.value).toBe(0);
+  expect(balance).toBe(0);
 });
 
 test("Deve ser possível depositar uma 100 e retornar a data de Deposito", () => {
@@ -37,11 +36,11 @@ test("Deve ser possível depositar uma 100 e retornar a data de Deposito", () =>
     name: "Alex",
   });
   const deposit_date = new Date("2023-07-21");
-  const output = account.deposit(100, deposit_date);
+  const output = account.deposit(100, deposit_date, deposit_date);
   const balance = account.getBalance();
 
   expect(output.deposit_date).toEqual(new Date("2023-07-21"));
-  expect(balance.value).toBe(100);
+  expect(balance).toBe(100);
 });
 
 test("Nao deve se depositar com uma data invalida!", () => {
@@ -70,12 +69,12 @@ test("Deve ser possível Sacar 100 de uma conta com saldo 1000 e retornar a data
   account.balance.value = 1000;
   const operation_date = new Date("2023-07-21");
 
-  const output = account.withdraw(100, operation_date);
+  const output = account.withdraw(100, operation_date, operation_date);
   const balance = account.getBalance();
 
   expect(output.withdraw_date).toBe(operation_date);
   expect(output.amount).toBe(100);
-  expect(balance.value).toBe(900);
+  expect(balance).toBe(900);
 });
 
 test("Nao deve ser possível sacar uma valor negativo", () => {

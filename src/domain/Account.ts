@@ -9,20 +9,33 @@ export class Account {
     readonly client_id: string,
     readonly name: string,
     readonly sequence = 1,
-    readonly created_at: Date,
-    readonly current_date = new Date()
+    readonly created_at: Date
   ) {
     this.code = new AccountCode(created_at, sequence);
     this.balance = new Balance(0);
   }
 
-  getBalance() {
-    return this.balance;
+  static create(
+    client_id: string,
+    name: string,
+    sequence = 1,
+    create_at?: Date
+  ) {
+    const current_date = create_at ?? new Date();
+    return new Account(client_id, name, sequence, current_date);
   }
 
-  deposit(amount: number, deposit_date = new Date()) {
+  getBalance() {
+    return this.balance.value;
+  }
+
+  deposit(
+    amount: number,
+    deposit_date = new Date(),
+    current_date = new Date()
+  ) {
     const not_is_future_date =
-      deposit_date.getTime() - this.current_date.getTime() < 0;
+      deposit_date.getTime() - current_date.getTime() < 0;
 
     if (not_is_future_date) {
       throw new Error(
@@ -38,9 +51,9 @@ export class Account {
     };
   }
 
-  withdraw(amount: number, withdraw_date: Date) {
+  withdraw(amount: number, withdraw_date: Date, current_date = new Date()) {
     const not_is_future_date =
-      withdraw_date.getTime() - this.current_date.getTime() < 0;
+      withdraw_date.getTime() - current_date.getTime() < 0;
 
     if (not_is_future_date) {
       throw new Error(
