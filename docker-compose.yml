@@ -16,3 +16,11 @@ services:
          POSTGRES_USER: ${DB_USER}
          POSTGRES_PASSWORD: ${DB_PASS}
          POSTGRES_DB: ${DB_NAME}
+
+
+    rabbitMq:
+      container_name: account_rabitmq
+      image: rabbitmq:3-management-alpine
+      ports:
+         - 5672:5672
+         - 15672:15672
