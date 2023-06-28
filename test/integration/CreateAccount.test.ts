@@ -1,11 +1,11 @@
 import { randomUUID } from "crypto";
 import { CreateAccountUseCase } from "../../src/application/usecases/CreateAccountUseCase";
-import { AccountRepository } from "../../src/infra/repositories/AccountRepositoryDatabase";
+import { AccountRepositoryDatabase } from "../../src/infra/repositories/AccountRepositoryDatabase";
 import { AccountRepositoryInMemory } from "../../src/infra/repositories/AccountRepositoryInMemory";
 import { knex_connection } from "../../src/database/knex";
 import { IAccountRepository } from "../../src/application/RepositoriesContracts/IAccountRepository";
 import { MailerRepositoryInMemory } from "../../src/infra/repositories/MeilerRepositoryInMemory";
-import { RabbitMQAdapter } from "../../src/infra/queue/RabbitMQAdpter";
+import { RabbitMQAdapter } from "../../src/infra/queue/RabbitMQAdapter";
 import { QueueController } from "../../src/infra/queue/QueueController";
 import { SendEmail } from "../../src/application/usecases/SendEmail";
 
@@ -17,7 +17,7 @@ beforeEach(async () => {
     await rabbitMqAdapter.connect();
 
     await knex_connection("account").truncate();
-    accountRepository = new AccountRepository();
+    accountRepository = new AccountRepositoryDatabase();
 });
 
 test("Deve criar uma nova conta", async () => {

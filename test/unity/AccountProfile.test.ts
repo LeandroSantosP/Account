@@ -13,7 +13,7 @@ test("Deve criar uma conta de profile para um client", () => {
     expect(accountProfile.password).toBe("senha123");
 });
 
-test("Deve encriptar a senha!", () => {
+test("Deve encriptar a senha e validar ela mesma!", async () => {
     const accountProfile = new AccountProfile(
         "João",
         "joao@gmail.com",
@@ -21,5 +21,22 @@ test("Deve encriptar a senha!", () => {
         new Address("Rua 1", 100, "Sao paulo")
     );
 
-    // accountProfile.encryptPassword();
+    await accountProfile.encryptPassword();
+
+    const password_is_valid = await accountProfile.verify("senha123");
+    expect(password_is_valid).toBeTruthy();
+});
+
+test("Deve encriptar a senha e validar ela mesma!", async () => {
+    const accountProfile = new AccountProfile(
+        "João",
+        "joao@gmail.com",
+        "senha123",
+        new Address("Rua 1", 100, "Sao paulo")
+    );
+
+    await accountProfile.encryptPassword();
+
+    const password_is_valid = await accountProfile.verify("senha123");
+    expect(password_is_valid).toBeTruthy();
 });

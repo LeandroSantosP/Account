@@ -7,8 +7,9 @@ export class TransferAccount {
         return new TransferAccount(from, to);
     }
 
-    transfer(amount: number, operation_date: Date) {
+    async transfer(amount: number, operation_date: Date) {
         this.from.withdraw(amount, operation_date);
-        this.to.deposit(amount, operation_date);
+
+        await this.to.deposit(amount, operation_date);
     }
 }

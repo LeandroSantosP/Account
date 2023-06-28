@@ -4,10 +4,9 @@ import { AccountRepositoryInMemory } from "../../src/infra/repositories/AccountR
 
 test("Deve sacar um 2000 de uma conta", async () => {
     const accountRepository = new AccountRepositoryInMemory();
+    const newAccount = Account.create("123", "JohnDoe", "JohnDoe@gmail.com", 1, new Date("2023-06-21"));
 
-    const newAccount = new Account("123", "JohnDoe", 1, new Date("2023-06-21"), "JohnDoe@gmail.com");
     newAccount.deposit(5000);
-    //Account.create("2", "Maria", "maria@gmail.com", 2, new Date("2023-06-21"));
     await accountRepository.save(newAccount);
 
     const withDrawAccount = new WithDrawAccountUseCase(accountRepository);
@@ -27,7 +26,7 @@ test("Deve sacar um 2000 de uma conta", async () => {
 test("Nao Deve ser possível sacar um valor maior que o saldo!", async () => {
     const accountRepository = new AccountRepositoryInMemory();
 
-    const newAccount = new Account("123", "JohnDoe", 1, new Date("2023-06-21"), "JohnDoe@gmail.com");
+    const newAccount = Account.create("123", "JohnDoe", "JohnDoe@gmail.com", 1, new Date("2023-06-21"));
     newAccount.deposit(1000);
     await accountRepository.save(newAccount);
 

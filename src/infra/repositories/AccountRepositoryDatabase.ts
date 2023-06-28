@@ -3,7 +3,7 @@ import { knex_connection } from "../../database/knex";
 import { Account } from "../../domain/Account";
 import { IAccountRepository } from "../../application/RepositoriesContracts/IAccountRepository";
 
-export class AccountRepository implements IAccountRepository {
+export class AccountRepositoryDatabase implements IAccountRepository {
     connection: Knex;
 
     constructor() {

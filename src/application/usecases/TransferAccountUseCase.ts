@@ -10,7 +10,7 @@ export class TransferAccountUseCase {
 
         const transferAccount = TransferAccount.execute(account_from, account_to);
 
-        transferAccount.transfer(input.amount, new Date(input.transfer_date));
+        await transferAccount.transfer(input.amount, new Date(input.transfer_date));
 
         await this.accountRepository.UpdatedSaldo(account_from);
         await this.accountRepository.UpdatedSaldo(account_to);

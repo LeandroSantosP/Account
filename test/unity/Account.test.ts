@@ -1,4 +1,6 @@
 import { Account } from "../../src/domain/Account";
+import { Award } from "lucide-react";
+import { Currency, Input, Output } from "../../src/interfaces/Currency";
 interface IAccountTest {
     id: string;
     name: string;
@@ -32,20 +34,20 @@ test("Deve ser criar uma conta con saldo 0", () => {
     expect(balance).toBe(0);
 });
 
-test("Deve ser possível depositar uma 100 e retornar a data de Deposito", () => {
+test("Deve ser possível depositar uma 100 e retornar a data de Deposito", async () => {
     const account = AlexAccountTest({
         id: "123",
         name: "Alex",
     });
     const deposit_date = new Date("2023-07-21");
-    const output = account.deposit(100, deposit_date, deposit_date);
+    const output = await account.deposit(100, deposit_date, deposit_date);
     const balance = account.getBalance();
 
-    expect(output.deposit_date).toEqual(new Date("2023-07-21"));
+    expect(output!.deposit_date).toEqual(new Date("2023-07-21"));
     expect(balance).toBe(100);
 });
-
-test("Nao deve se depositar com uma data invalida!", () => {
+/*  */
+test("Nao deve se depositar com uma data invalida!", async () => {
     const current_date = new Date("2023-06-21");
     const account = AlexAccountTest({
         id: "123",
@@ -53,15 +55,18 @@ test("Nao deve se depositar com uma data invalida!", () => {
         current_date,
     });
     const deposit_date = new Date("2023-01-21");
-    expect(() => account.deposit(100, deposit_date)).toThrow(
+
+    await expect(() => account.deposit(100, deposit_date)).rejects.toThrow(
         new Error(`Deposit date (${deposit_date}) is invalid, must be future date!`)
     );
 });
 
-test("Nao deve ser possível depositar uma valor negativo", () => {
+test("Nao deve ser possível depositar uma valor negativo", async () => {
     const account = AlexAccountTest({ id: "123", name: "Alex" });
 
-    expect(() => account.deposit(-100)).toThrow(new Error("Deposit -100 is invalid, must be positive value!"));
+    await expect(() => account.deposit(-100)).rejects.toThrow(
+        new Error("Deposit -100 is invalid, must be positive value!")
+    );
 });
 
 test("Deve ser possível Sacar 100 de uma conta com saldo 1000 e retornar a data do saque", () => {
@@ -86,11 +91,11 @@ test("Nao deve ser possível sacar uma valor negativo", () => {
     );
 });
 
-test("Nao deve ser possível sacar uma valor no qual o client nao tem disponível", () => {
+test("Nao deve ser possível sacar uma valor no qual o client nao tem disponível", async () => {
     const account = AlexAccountTest({ id: "123", name: "Alex" });
     const withdraw_date = new Date("2023-07-21");
 
-    account.deposit(1000);
+    await account.deposit(1000);
     expect(() => account.withdraw(2000, withdraw_date)).toThrow(
         new Error(`Does not have this amount (2000) to withdraw, current account balance (1000).`)
     );
@@ -109,4 +114,23 @@ test("Nao deve se sacar com uma data invalida!", () => {
     expect(() => account.withdraw(1000, withdraw_date)).toThrow(
         Error(`Withdraw date (${withdraw_date}) is invalid, must be future date!`)
     );
+});
+
+test("Deve Fazer o deposito com base na currency (USD)", async () => {
+    const current_date = new Date("2023-06-21");
+
+    const fakeCurrency: Currency = {
+        async calculate(input: Input): Promise<Output> {
+            return {
+                code: "USD",
+                price: 10,
+            };
+        },
+    };
+
+    const account = Account.create("123", "João", "joao@gmail.com", 1, current_date, fakeCurrency);
+
+    await account.deposit(1000, current_date, current_date, "USD");
+
+    expect(account.balance.value).toBe(10000);
 });

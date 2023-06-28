@@ -6,7 +6,7 @@ export class DepositAccountUseCase {
     async execute(input: Input): Promise<Output> {
         const account = await this.accountRepository.getAccountByCode(input.account_code);
 
-        const deposit_date = account.deposit(input.amount, new Date(input.deposit_date));
+        const deposit_date = await account.deposit(input.amount, new Date(input.deposit_date));
         const { current_balance } = await this.accountRepository.UpdatedSaldo(account);
 
         return {
