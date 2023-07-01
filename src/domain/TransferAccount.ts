@@ -1,3 +1,4 @@
+import { Currency } from "../interfaces/Currency";
 import { Account } from "./Account";
 
 export class TransferAccount {
@@ -7,9 +8,9 @@ export class TransferAccount {
         return new TransferAccount(from, to);
     }
 
-    async transfer(amount: number, operation_date: Date) {
+    async transfer(amount: number, operation_date: Date, currency: Currency) {
         this.from.withdraw(amount, operation_date);
 
-        await this.to.deposit(amount, operation_date);
+        await this.to.deposit(amount, operation_date, operation_date, "BRL", currency);
     }
 }

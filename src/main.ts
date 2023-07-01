@@ -1,8 +1,27 @@
+import { SendEmail } from "./application/usecases/SendEmail";
 import { ExpressAdapter } from "./infra/http/api/ExpressAdapter";
 import { Routers } from "./infra/http/api/Routers";
+import { QueueController } from "./infra/queue/QueueController";
+import { RabbitMQAdapter } from "./infra/queue/RabbitMQAdapter";
+import { MailerRepositoryInMemory } from "./infra/repositories/MeilerRepositoryInMemory";
+import dovEnv from "dotenv";
+dovEnv.config();
 
-const http = new ExpressAdapter();
+async function main() {
+    const http = new ExpressAdapter();
 
-new Routers(http);
+    const queue = RabbitMQAdapter.getInstance();
+    await queue.connect();
 
-http.listen();
+    const sendEmailInMemory = new MailerRepositoryInMemory();
+
+    const sendEmail = new SendEmail(sendEmailInMemory, queue);
+
+    new QueueController(sendEmail, queue);
+
+    new Routers(http, queue);
+
+    await http.listen();
+}
+
+main();

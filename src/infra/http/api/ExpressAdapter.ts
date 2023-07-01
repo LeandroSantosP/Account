@@ -19,8 +19,7 @@ export class ExpressAdapter implements Http {
 
     public(method: "post" | "get" | "put" | "delete", url: string, callback: Function): void {
         this.connection[method](url, async (request, response) => {
-            const output = await callback(request, response);
-            return response.status(200).json(output);
+            await callback(request, response);
         });
     }
 

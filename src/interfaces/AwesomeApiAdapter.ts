@@ -1,3 +1,4 @@
+import { CustomError } from "../infra/http/middlewares/CustomError";
 import { Currency, Input, Output } from "./Currency";
 import axios from "axios";
 
@@ -16,6 +17,10 @@ export class AwesomeApiAdapter implements Currency {
             BTC: "BTC-BRL",
         } as { [key: string]: string };
 
+        if (availableCurrencies[currency] === undefined) {
+            throw new CustomError("Invalid Currency!");
+        }
+
         const url = `https://economia.awesomeapi.com.br/json/last/${availableCurrencies[currency]}`;
 
         let formatsResults = {
@@ -23,6 +28,7 @@ export class AwesomeApiAdapter implements Currency {
             EUR: "EURBRL",
             BTC: "BTCBRL",
         } as { [key: string]: string };
+
         const { data } = await axios.get(url);
         const output: Output = {
             code: data[formatsResults[currency]].code,

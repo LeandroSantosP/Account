@@ -1,4 +1,3 @@
-import { AwesomeApiAdapter } from "../interfaces/AwesomeApiAdapter";
 import { Currency } from "../interfaces/Currency";
 import { AccountCode } from "./AccountCode";
 import { Balance } from "./Balance";
@@ -13,30 +12,28 @@ export class Account {
         readonly name: string,
         readonly sequence = 1,
         readonly created_at: Date,
-        readonly email: string,
-        private currency_format: Currency
+        readonly email: string
     ) {
         this.code = new AccountCode(created_at, sequence);
         this.balance = new Balance(0);
     }
 
-    static create(
-        client_id: string,
-        name: string,
-        email: string,
-        sequence = 1,
-        create_at?: Date,
-        currency = new AwesomeApiAdapter()
-    ) {
+    static create(client_id: string, name: string, email: string, sequence = 1, create_at?: Date) {
         const current_date = create_at ?? new Date();
-        return new Account(client_id, name, sequence, current_date, email, currency);
+        return new Account(client_id, name, sequence, current_date, email);
     }
 
     getBalance() {
         return this.balance.value;
     }
 
-    async deposit(amount: number, deposit_date = new Date(), current_date = new Date(), currency = "BRL") {
+    async deposit(
+        amount: number,
+        deposit_date = new Date(),
+        current_date = new Date(),
+        currency = "BRL",
+        currency_format: Currency
+    ) {
         const not_is_future_date = deposit_date.getTime() - current_date.getTime() < 0;
 
         if (not_is_future_date) {
@@ -46,7 +43,7 @@ export class Account {
             throw new Error(`Deposit ${amount} is invalid, must be positive value!`);
         }
 
-        const calculateDeposit = new CalculateDeposit(currency, this.currency_format);
+        const calculateDeposit = new CalculateDeposit(currency, currency_format);
         const amountCalculate = await calculateDeposit.execute(amount);
 
         this.balance.value += amountCalculate;

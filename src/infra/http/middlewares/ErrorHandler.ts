@@ -14,8 +14,11 @@ export class ErrorHandler {
             });
         }
 
+        console.log(erro);
+
         return response.status(500).json({
             message: "Internal server error",
+            erro,
         });
     }
 }

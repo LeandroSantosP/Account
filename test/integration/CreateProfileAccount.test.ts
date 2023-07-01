@@ -3,7 +3,7 @@ import { AccountProfileRepositoryDatabase } from "../../src/infra/repositories/A
 import { AccountProfileRepositoryInMemory } from "../../src/infra/repositories/AccountProfileRepositoryInMemory";
 import { knex_connection } from "../../src/database/knex";
 test("Deve criar uma Conta de Profile para um client", async () => {
-    await knex_connection("account_profile").truncate();
+    await knex_connection.raw("TRUNCATE TABLE account_profile, address CASCADE");
 
     // const accountProfileRepository = new AccountProfileRepositoryInMemory();
     const repositoryDatabase = new AccountProfileRepositoryDatabase();

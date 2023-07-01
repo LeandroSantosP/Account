@@ -10,5 +10,10 @@ export class AccountProfileRepositoryInMemory implements IAccountProfileReposito
         const accountProfile = this.accounts.find((account) => account.email === email);
         return accountProfile ?? null;
     }
+
+    async getClientId(id: string): Promise<AccountProfile | null> {
+        const accountProfile = this.accounts.find((account) => account.id === id);
+        return accountProfile ?? null;
+    }
     async close(): Promise<void> {}
 }

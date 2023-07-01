@@ -6,6 +6,7 @@ export class SendEmail {
 
     async execute(input: Input): Promise<void> {
         await this.mailerRepository.sendEmail(input.client_email, input.message);
+        console.log("Email sent");
     }
 }
 

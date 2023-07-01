@@ -1,5 +1,6 @@
 import { Account } from "../../domain/Account";
 import { IAccountRepository } from "../../application/RepositoriesContracts/IAccountRepository";
+import { CustomError } from "../http/middlewares/CustomError";
 
 export class AccountRepositoryInMemory implements IAccountRepository {
     accounts: Account[] = [];
@@ -17,7 +18,7 @@ export class AccountRepositoryInMemory implements IAccountRepository {
 
     async getAccountByCode(code: string): Promise<Account> {
         const account = this.accounts.find((account) => account.getCode() === code);
-        if (!account) throw new Error("Account not found");
+        if (!account) throw new CustomError("Account not found");
         return account;
     }
 

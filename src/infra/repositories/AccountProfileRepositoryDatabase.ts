@@ -40,7 +40,7 @@ export class AccountProfileRepositoryDatabase implements IAccountProfileReposito
                 "address.*"
             )
             .innerJoin("address", "account_profile.address_id", "address.id")
-            .where({ email });
+            .where({ "account_profile.email": email });
 
         if (!accountData) {
             return null;
@@ -50,6 +50,31 @@ export class AccountProfileRepositoryDatabase implements IAccountProfileReposito
         return new AccountProfile(accountData.name, accountData.email, accountData.password, address, accountData.id);
     }
 
+    async getClientId(id: string): Promise<AccountProfile | null> {
+        const [accountData] = await this.connection("account_profile")
+            .select(
+                "account_profile.name",
+                "account_profile.id as profile_id",
+                "account_profile.email",
+                "account_profile.password",
+                "address.*"
+            )
+            .innerJoin("address", "account_profile.address_id", "address.id")
+            .where({ "account_profile.id": id });
+
+        if (!accountData) {
+            return null;
+        }
+
+        const address = new Address(accountData.street, accountData.number, accountData.city);
+        return new AccountProfile(
+            accountData.name,
+            accountData.email,
+            accountData.password,
+            address,
+            accountData.profile_id
+        );
+    }
     async close(): Promise<void> {
         await this.connection.destroy();
     }
