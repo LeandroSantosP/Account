@@ -1,2 +1,0 @@
-Deve ser possível criar uma conta com nome do titula, id da conta, data de abertura.
-O id da conta deve ser sequencial;

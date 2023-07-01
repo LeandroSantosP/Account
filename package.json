@@ -1,15 +1,15 @@
 {
-  "name": "project",
+  "name": "Account",
   "version": "1.0.0",
-  "description": "typescript-boilerplate  ",
-  "main": "index.js",
+  "description": "Simulate Account bank",
+  "main": "/src/main.ts",
   "scripts": {
     "dev": "tsx watch src/main.ts",
     "build": "yarn && rimraf dist/ && tsc",
     "start": "yarn build && node dist/src/main.js",
     "test": "jest"
   },
-  "author": "Augusto Eduardo Torres",
+  "author": "Leandro Pereira Dos Santos",
   "license": "ISC",
   "devDependencies": {
     "@types/amqplib": "^0.10.1",
