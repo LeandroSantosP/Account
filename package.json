@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/main.ts",
-    "build": "npm run lint && rimraf dist/ && tsc",
-    "start": "npm run build && node dist/index.js",
+    "build": "yarn && rimraf dist/ && tsc",
+    "start": "yarn build && node dist/src/main.js",
     "test": "jest"
   },
   "author": "Augusto Eduardo Torres",

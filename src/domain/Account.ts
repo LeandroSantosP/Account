@@ -1,3 +1,4 @@
+import { CustomError } from "../infra/http/middlewares/CustomError";
 import { Currency } from "../interfaces/Currency";
 import { AccountCode } from "./AccountCode";
 import { Balance } from "./Balance";
@@ -57,17 +58,17 @@ export class Account {
         const not_is_future_date = withdraw_date.getTime() - current_date.getTime() < 0;
 
         if (not_is_future_date) {
-            throw new Error(`Withdraw date (${withdraw_date}) is invalid, must be future date!`);
+            throw new CustomError(`Withdraw date (${withdraw_date}) is invalid, must be future date!`);
         }
 
         if (amount < 0) {
-            throw new Error(`Withdraw ${amount} is invalid, must be positive value!`);
+            throw new CustomError(`Withdraw ${amount} is invalid, must be positive value!`);
         }
 
         const client_current_balance = this.balance.value;
 
         if (client_current_balance < amount) {
-            throw new Error(
+            throw new CustomError(
                 `Does not have this amount (${amount}) to withdraw, current account balance (${client_current_balance}).`
             );
         }

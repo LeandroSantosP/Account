@@ -8,6 +8,10 @@ import { AccountProfileRepositoryDatabase } from "../../src/infra/repositories/A
 import { AccountProfile } from "../../src/domain/AccountProfile";
 import { Address } from "../../src/domain/Address";
 import { knex_connection } from "../../src/database/knex";
+import { IAccountProfileRepository } from "../../src/application/RepositoriesContracts/IAccountProfileRepository";
+import { IAccountRepository } from "../../src/application/RepositoriesContracts/IAccountRepository";
+import { cleanDatabase } from "../setup";
+import { CustomError } from "../../src/infra/http/middlewares/CustomError";
 
 const fakeCurrency: Currency = {
     async calculate(input: Input): Promise<Output> {
@@ -18,21 +22,23 @@ const fakeCurrency: Currency = {
     },
 };
 
+let accountProfileRepository: IAccountProfileRepository;
+let accountRepository: IAccountRepository;
+
 beforeEach(async () => {
-    await knex_connection.raw("TRUNCATE TABLE account_profile, address CASCADE");
-    await knex_connection("account").truncate();
+    await cleanDatabase();
+
+    accountProfileRepository = new AccountProfileRepositoryDatabase();
+    accountRepository = new AccountRepositoryDatabase();
 });
 test("Deve sacar um 2000 de uma conta", async () => {
     const client_id = randomUUID();
-
-    const accountProfileRepository = new AccountProfileRepositoryDatabase();
 
     await accountProfileRepository.save(
         new AccountProfile("João", "joao@gmail.com", "senha123", new Address("Rua ,1", 100, "Sao paulo"), client_id)
     );
 
     // const accountRepository = new AccountRepositoryInMemory();
-    const accountRepository = new AccountRepositoryDatabase();
     const newAccount = Account.create(client_id, "JohnDoe", "JohnDoe@gmail.com", 1, new Date("2023-06-21"));
 
     await newAccount.deposit(5000, new Date(), new Date(), "BRL", fakeCurrency);
@@ -79,6 +85,11 @@ test("Nao Deve ser possível sacar um valor maior que o saldo!", async () => {
     };
 
     await expect(() => withDrawAccount.execute(input)).rejects.toThrow(
-        new Error("Does not have this amount (2000) to withdraw, current account balance (1000).")
+        new CustomError("Does not have this amount (2000) to withdraw, current account balance (1000).")
     );
+});
+
+afterAll(async () => {
+    await accountProfileRepository.close();
+    await accountRepository.close();
 });

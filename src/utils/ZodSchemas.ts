@@ -35,3 +35,13 @@ export const deposit_account_schema = z
         currency: z.string().optional(),
     })
     .strict();
+
+export const withdraw_account_schema = z
+    .object({
+        account_code: z.string(),
+        amount: z.number().min(0),
+        withdraw_date: z.string().refine((value) => {
+            return !!/^\d{4}-\d{2}-\d{2}$/.test(value);
+        }),
+    })
+    .strict();

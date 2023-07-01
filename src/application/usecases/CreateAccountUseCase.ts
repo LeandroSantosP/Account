@@ -25,15 +25,10 @@ export class CreateAccountUseCase {
         const newAccount = Account.create(input.client_id, input.owner_name, input.email, sequence);
         await this.accountRepository.save(newAccount);
 
-        const AccountCreatedInput = {
-            email: input.email,
-            subject: "Criação de conta Efetuado com secesso!",
-            message: `Parabéns ${input.owner_name}, sua conta foi criada com sucesso!`,
-        };
         const accountCreated = new AccountCreated(
-            AccountCreatedInput.email,
-            AccountCreatedInput.subject,
-            AccountCreatedInput.message
+            input.email,
+            "Criação de conta Efetuado com secesso!",
+            `Parabéns ${input.owner_name}, sua conta foi criada com sucesso!`
         );
 
         await this.queue.publisher("AccountCreated", accountCreated);

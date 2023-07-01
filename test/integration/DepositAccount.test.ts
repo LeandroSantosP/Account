@@ -4,10 +4,10 @@ import { AccountRepositoryInMemory } from "../../src/infra/repositories/AccountR
 import { Currency, Input, Output } from "../../src/interfaces/Currency";
 import { AccountRepositoryDatabase } from "../../src/infra/repositories/AccountRepositoryDatabase";
 import { randomUUID } from "crypto";
-import { knex_connection } from "../../src/database/knex";
 import { AccountProfileRepositoryDatabase } from "../../src/infra/repositories/AccountProfileRepositoryDatabase";
 import { AccountProfile } from "../../src/domain/AccountProfile";
 import { Address } from "../../src/domain/Address";
+import { cleanDatabase } from "../setup";
 
 const fakeCurrency: Currency = {
     async calculate(input: Input): Promise<Output> {
@@ -19,8 +19,7 @@ const fakeCurrency: Currency = {
 };
 
 beforeEach(async () => {
-    await knex_connection.raw("TRUNCATE TABLE account_profile, address CASCADE");
-    await knex_connection("account").truncate();
+    await cleanDatabase();
 });
 
 test("Deve Fazer um deposito em uma conta de 12000", async () => {
