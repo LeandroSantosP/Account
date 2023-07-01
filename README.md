@@ -6,8 +6,8 @@ Feito com intuito de treinar conceitos e padrões como por exemplo: DDD, TDD, Cl
 Pré-requisitos
 Certifique-se de ter as seguintes dependências instaladas em seu sistema antes de executar a API:
 
-Node.js (versão X.X.X ou superior)
-NPM (gerenciador de pacotes do Node.js)
+Node.js (versão 18.16.0 ou superior)
+YARN (gerenciador de pacotes do Node.js)
 RabbitMQ (broker de mensagens)
 Banco de dados (PostgreSQL) e as credenciais de acesso
 
