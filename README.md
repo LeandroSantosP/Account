@@ -120,3 +120,15 @@ Corpo da requisição EXEMPLO:
 "amount": 1000,
 "withdraw_date": "2023-07-20"
 }
+
+6 - URL: localhost:3000/transfer
+
+Método: POST
+
+Corpo da requisição EXEMPLO:
+{
+"from": "202300000002",
+"to": "202300000001",
+"amount": 1000,
+"transfer_date": "2023-07-20"
+}

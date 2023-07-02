@@ -2,6 +2,7 @@ import { CreateAccountController } from "../../../application/controllers/Create
 import { CreateProfileAccountUseCaseController } from "../../../application/controllers/CreateProfileAccountUseCaseController";
 import { DepositAccountController } from "../../../application/controllers/DepositAccountControoler";
 import { GetAccountController } from "../../../application/controllers/GetAccountController";
+import { TransferAccountController } from "../../../application/controllers/TransferAccountController";
 import { WithDrawAccountController } from "../../../application/controllers/WithDrawController";
 import { Queue } from "../../queue/Queue";
 import { Http } from "./Http";
@@ -30,6 +31,11 @@ export class Routers {
 
         this.http.public("post", "/withdraw", async (request: any, response: any) => {
             const controller = new WithDrawAccountController();
+            return await controller.handle(request, response);
+        });
+
+        this.http.public("post", "/transfer", async (request: any, response: any) => {
+            const controller = new TransferAccountController();
             return await controller.handle(request, response);
         });
     }

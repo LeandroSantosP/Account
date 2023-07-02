@@ -45,3 +45,12 @@ export const withdraw_account_schema = z
         }),
     })
     .strict();
+
+export const transfer_account_schema = z.object({
+    from: z.string(),
+    to: z.string(),
+    amount: z.number(),
+    transfer_date: z.string().refine((value) => {
+        return !!/^\d{4}-\d{2}-\d{2}$/.test(value);
+    }),
+});

@@ -53,8 +53,8 @@ test("Deve Fazer um deposito em dólar/americano e converter automaticamente par
     );
 
     const accountRepository = new AccountRepositoryDatabase();
-    const account = Account.create(client_id, "João", "joao@gmail.com", 10, new Date("2023-06-21"));
 
+    const account = Account.create(client_id, "João", "joao@gmail.com", 10, new Date("2023-06-21"));
     await account.deposit(1000, new Date("2023-06-21"), new Date("2023-06-21"), "BRL", fakeCurrency);
 
     await accountRepository.save(account);
