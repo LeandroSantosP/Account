@@ -30,7 +30,6 @@ beforeEach(async () => {
 
 test("Deve criar uma nova conta", async () => {
     const accountRepository = new AccountRepositoryInMemory();
-    // const accountProfileRepository = new AccountProfileRepositoryInMemory();
     const client_id = randomUUID();
 
     await accountProfileRepository.save(
@@ -85,6 +84,7 @@ test("Deve criar uma nova conta e enviar um email confirmando a cadastro!", asyn
     await accountProfileRepository.save(
         new AccountProfile("João", "joao@gmail.com", "senha123", new Address("Rua 1", 100, "Sao paulo"), client_id)
     );
+
     const sendEmail = new SendEmail(mailerRepositoryInMemory, rabbitMqAdapter);
     new QueueController(sendEmail, rabbitMqAdapter);
 

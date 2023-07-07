@@ -13,7 +13,6 @@ beforeEach(async () => {
 test("Deve obter uma conta.", async () => {
     const client_id = randomUUID();
     const newAccount = Account.create(client_id, "JohnDoe", "johnDoe@gmail.com", 1, new Date("2022-12-10"));
-    console.log(newAccount.getCode());
     await accountRepository.save(newAccount);
 
     const getAccount = new GetAccountUseCase(accountRepository);

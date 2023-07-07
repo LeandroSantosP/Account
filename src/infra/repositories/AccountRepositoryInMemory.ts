@@ -4,6 +4,14 @@ import { CustomError } from "../http/middlewares/CustomError";
 
 export class AccountRepositoryInMemory implements IAccountRepository {
     accounts: Account[] = [];
+    static instance: AccountRepositoryInMemory;
+
+    static getInstance() {
+        if (!AccountRepositoryInMemory.instance) {
+            AccountRepositoryInMemory.instance = new AccountRepositoryInMemory();
+        }
+        return AccountRepositoryInMemory.instance;
+    }
 
     async getAccountByClientId(client_id: string): Promise<Account | null> {
         const account = this.accounts.find((account) => account.client_id === client_id);
