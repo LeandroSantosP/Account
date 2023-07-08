@@ -21,8 +21,9 @@ let accountProfileRepository: IAccountProfileRepository;
 beforeEach(async () => {
     rabbitMqAdapter = RabbitMQAdapter.getInstance();
     await rabbitMqAdapter.connect();
-    await knex_connection("account").truncate();
-    await knex_connection.raw("TRUNCATE TABLE account_profile, address CASCADE");
+
+    await knex_connection.raw("DELETE FROM account CASCADE");
+    await knex_connection.raw("DELETE FROM account_profile CASCADE");
 
     accountProfileRepository = new AccountProfileRepositoryDatabase();
     accountRepository = new AccountRepositoryDatabase();

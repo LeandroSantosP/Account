@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { Charge, PayOutput } from "./Charge";
 import { CalculateChargeTax } from "./CalculateChargeTax";
-import { ICalculateChargeTax } from "./ICalculateChargeTax";
+import { ICalculateChargeTax } from "../interfaces/ICalculateChargeTax";
 
 export class ChargeWithTax extends Charge {
     private constructor(
@@ -18,12 +18,13 @@ export class ChargeWithTax extends Charge {
     static create(
         description: string,
         amount: number,
+        current_amount: number,
         client_code: string,
         date = new Date(),
         id: string = randomUUID(),
         CalculateTax = new CalculateChargeTax()
     ) {
-        return new ChargeWithTax(id, description, amount, amount, client_code, CalculateTax, date);
+        return new ChargeWithTax(id, description, amount, current_amount, client_code, CalculateTax, date);
     }
 
     pay(input: { payment_date: Date; amount: number }): PayOutput {
@@ -43,6 +44,10 @@ export class ChargeWithTax extends Charge {
 
         if (current_amount) {
             this.current_amount = current_amount;
+        }
+
+        if (this.current_amount === 0) {
+            this.status = "paid";
         }
 
         return {

@@ -1,4 +1,4 @@
-import { Charge } from "../../domain/Charge";
+import { ChargeWithOutTax } from "../../domain/ChargeWithOutTax";
 import { RepositoryFactory } from "../../interfaces/RepositoryFactory";
 import { IAccountRepository } from "../RepositoriesContracts/IAccountRepository";
 import { IChargeRepository } from "../RepositoriesContracts/IChargeRepository";
@@ -13,7 +13,7 @@ export class MackChargeUsecase {
 
     async execute(input: Input): Promise<Output> {
         const account = await this.accountRepository.getAccountByCode(input.account_code);
-        const charge = Charge.create(input.description, input.amount, account.getCode(), new Date());
+        const charge = ChargeWithOutTax.create(input.description, input.amount, account.getCode(), new Date());
         await this.chargeRepository.save(charge);
 
         const output: Output = {

@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { Charge, PayOutput } from "./Charge";
-import { ICalculateChargeTax } from "./ICalculateChargeTax";
+import { ICalculateChargeTax } from "../interfaces/ICalculateChargeTax";
 import { CalculateChargeTax } from "./CalculateChargeTax";
 
 export class ChargeWithOutTax extends Charge {
@@ -32,6 +32,10 @@ export class ChargeWithOutTax extends Charge {
 
         this.payment_date = input.payment_date;
         this.current_amount -= input.amount;
+
+        if (this.current_amount === 0) {
+            this.status = "paid";
+        }
         return {
             total_amount: this.amount,
             amount_pay: input.amount,

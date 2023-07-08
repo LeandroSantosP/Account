@@ -1,5 +1,6 @@
 import { IChargeRepository } from "../../application/RepositoriesContracts/IChargeRepository";
 import { Charge } from "../../domain/Charge";
+import { ChargeWithOutTax } from "../../domain/ChargeWithOutTax";
 
 export class ChargeRepositoryMemory implements IChargeRepository {
     charges: Charge[] = [];
@@ -33,5 +34,12 @@ export class ChargeRepositoryMemory implements IChargeRepository {
 
     async listByClientCode(code: string): Promise<Charge[]> {
         return this.charges.filter((charge) => charge.client_code === code);
+    }
+
+    async updated(charge: Charge): Promise<void> {
+        const currentCharge = await this.get(charge.id);
+        const index = this.charges.indexOf(currentCharge);
+        if (index === -1) throw new Error("Charge not found");
+        this.charges[index] = charge;
     }
 }

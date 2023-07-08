@@ -1,14 +1,13 @@
-import { Charge } from "../../src/domain/Charge";
 import { ChargeWithOutTax } from "../../src/domain/ChargeWithOutTax";
 import { ChargeWithTax } from "../../src/domain/ChargeWithTax";
 
 test("Deve criar uma cobrança", function () {
-    const charge = ChargeWithTax.create("Test", 1000, "1234", new Date("2021-01-01"));
+    const charge = ChargeWithTax.create("Test", 1000, 1000, "1234", new Date("2021-01-01"));
     expect(charge).toBeDefined();
 });
 
-test("Deve ser possível pagar uma cobrança", function () {
-    const charge = ChargeWithTax.create("Test", 1000, "1234", new Date("2023-01-01"));
+test("Deve ser possível pagar uma cobrança e atualizar o status para paid", function () {
+    const charge = ChargeWithTax.create("Test", 1000, 1000, "1234", new Date("2023-01-01"));
 
     const payment = charge.pay({
         amount: 500,
@@ -23,10 +22,11 @@ test("Deve ser possível pagar uma cobrança", function () {
     expect(payment2.total_amount).toBe(1000);
     expect(payment2.amount_pay).toBe(500);
     expect(payment2.rest_for_payment).toBe(0);
+    expect(charge.status).toBe("paid");
 });
 
 test("Deve adicionar uma taxa de 1% casso nao seja pago em 1 mes", function () {
-    const charge = ChargeWithTax.create("Test", 1000, "1234", new Date("2023-01-01"));
+    const charge = ChargeWithTax.create("Test", 1000, 1000, "1234", new Date("2023-01-01"));
 
     charge.pay({
         amount: 200,
@@ -44,7 +44,7 @@ test("Deve adicionar uma taxa de 1% casso nao seja pago em 1 mes", function () {
 });
 
 test("Deve lançar um erro casso tente pagar mais do que o valor da cobrança", function () {
-    const charge = ChargeWithTax.create("Test", 1000, "1234", new Date("2023-01-01"));
+    const charge = ChargeWithTax.create("Test", 1000, 1000, "1234", new Date("2023-01-01"));
 
     expect(() =>
         charge.pay({

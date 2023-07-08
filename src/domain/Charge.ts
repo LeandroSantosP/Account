@@ -1,4 +1,4 @@
-import { ICalculateChargeTax } from "./ICalculateChargeTax";
+import { ICalculateChargeTax } from "../interfaces/ICalculateChargeTax";
 
 export type PayOutput = {
     total_amount: number;
@@ -14,13 +14,17 @@ export abstract class Charge {
         readonly id: string,
         readonly description: string,
         public amount: number,
-        protected current_amount: number,
+        public current_amount: number,
         readonly client_code: string,
         readonly CalculateTax: ICalculateChargeTax,
 
         readonly date: Date
     ) {
         this.status = "waiting_funds";
+    }
+
+    getCurrentAmount() {
+        return this.current_amount;
     }
 
     abstract pay(input: { payment_date: Date; amount: number }): PayOutput;

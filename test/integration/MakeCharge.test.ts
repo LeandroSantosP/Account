@@ -20,7 +20,7 @@ test("Deve realizar uma Cobrança", async function () {
     };
 
     const output = await makeCharge.execute(input);
-    const output_2 = await makeCharge.execute(input);
+    await makeCharge.execute(input);
 
     const charge = await chargeRepository.listByClientCode(newAccount.getCode());
 

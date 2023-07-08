@@ -1,4 +1,4 @@
-import { ICalculateChargeTax, CalculateInput } from "./ICalculateChargeTax";
+import { ICalculateChargeTax, CalculateInput } from "../interfaces/ICalculateChargeTax";
 
 export class CalculateChargeTax implements ICalculateChargeTax {
     calculate(input: CalculateInput): number | void {
